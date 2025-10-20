@@ -5,17 +5,22 @@ from django.utils import timezone
 
 
 class Customer(models.Model):
-    name = models.CharField()
+    name = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
     phone = models.CharField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return self.name
 
 
 class Product(models.Model):
-    name = models.CharField()
+    name = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     stock = models.PositiveBigIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
 
 
 class Order(models.Model):
@@ -23,3 +28,6 @@ class Order(models.Model):
     product_ids = models.ManyToManyField(Product)
     order_date = models.DateTimeField(default=timezone.now)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Order {self.id} by {self.customer_id.name}"
