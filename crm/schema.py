@@ -1,14 +1,34 @@
 from graphene_django import DjangoObjectType, DjangoListField
 import graphene
+from graphene_django.filter import DjangoFilterConnectionField
 from .models import Customer, Product, Order
 import re
 from graphql import GraphQLError
 from django.utils import timezone
+from .filters import CustomerFilter, ProductFilter, OrderFilter
 
+class CustomerNode(DjangoObjectType):
+    class Meta:
+        model = Customer
+        interfaces = (graphene.relay.Node, )
+        filterset_class = CustomerFilter
 
+class ProductNode(DjangoObjectType):
+    class Meta:
+        model = Product
+        interfaces = (graphene.relay.Node, )
+        filterset_class = ProductFilter
+
+class OrderNode(DjangoObjectType):
+    class Meta:
+        model = Order
+        interfaces = (graphene.relay.Node, )
+        filterset_class = OrderFilter
+    
 class CustomerType(DjangoObjectType):
     class Meta:
         model = Customer
+        
 
 
 class ProductType(DjangoObjectType):
@@ -163,6 +183,19 @@ class Query(graphene.ObjectType):
     customers = graphene.List(CustomerType)
     orders = graphene.List(OrderType)
     products = graphene.List(ProductType)
+    all_customers = DjangoFilterConnectionField(CustomerNode)
+    all_orders = DjangoFilterConnectionField(OrderNode)
+    all_products = DjangoFilterConnectionField(ProductNode)
+
+    # def resolve_all_products(root, info, filter=None, **kwargs):
+    #     qs = Product.objects.all()
+    #     if filter:
+    #         filterset = ProductFilter(data=filter, queryset=qs)
+    #         if filterset.is_valid():
+    #             return filterset.qs
+    #         else:
+    #             raise GraphQLError(f"Invalid filter: {filterset.errors}")
+        # return qs
 
     def resolve_customers(root, info):
         return Customer.objects.all()
