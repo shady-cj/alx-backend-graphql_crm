@@ -2,3 +2,4 @@ Django
 djangorestframework
 django-filter
 graphene-django
+gql[all]
