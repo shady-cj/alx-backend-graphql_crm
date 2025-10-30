@@ -1,0 +1,1 @@
+0 2 * * 0 /c/Users/SICKBOY/ceejay/alx-backend-pro/alx-backend-graphql_crm/crm/cron_jobs/clean_inactive_customer.sh
