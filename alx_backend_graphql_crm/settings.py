@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "graphene_django",
     "django_filters",
-    "crm"
+    "crm",
+    "django_crontab"
 ]
 
 
@@ -77,6 +78,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "alx_backend_graphql_crm.wsgi.application"
 
+CRONJOBS = [
+    ('*/5 * * * *', 'crm.cron.log_crm_heartbeat'),
+]
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
