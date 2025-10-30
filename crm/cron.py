@@ -1,10 +1,11 @@
 import datetime
 
 from gql import Client, gql
+from gql.transport.requests import RequestsHTTPTransport
 from gql.transport.aiohttp import AIOHTTPTransport
 
 # Select your transport with a defined url endpoint
-transport = AIOHTTPTransport(url="http://localhost:8000/graphql")
+transport = RequestsHTTPTransport(url="http://localhost:8000/graphql")
 
 # Create a GraphQL client using the defined transport
 client = Client(transport=transport)
