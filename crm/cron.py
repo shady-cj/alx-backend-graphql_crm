@@ -34,3 +34,22 @@ def log_crm_heartbeat():
     # Execute the query
     response = client.execute(query)
     print(response)
+
+
+def update_low_stock():
+    query = gql(
+        """
+        mutation {
+            updateLowStockProducts {
+                products {
+                    id
+                    name
+                    stock
+                    price
+                }
+            }
+        }
+    """
+    )
+    response = client.execute(query)
+    print(response)

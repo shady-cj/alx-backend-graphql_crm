@@ -173,12 +173,22 @@ class CreateOrder(graphene.Mutation):
 
 
 
+class UpdateLowStockProducts(graphene.Mutation):
+    from django.db.models import F
+    products = graphene.List(ProductType)
+
+    def mutate(self, info):
+        Product.objects.filter(stock__lt=10).update(stock=F('stock') + 10)
+        
+        return UpdateLowStockProducts(products=Product.objects.all())
+
 
 class Mutation(graphene.ObjectType):
     create_order = CreateOrder.Field()
     create_customer = CreateCustomer.Field()
     bulk_create_customer = BulkCreateCustomers.Field()
     create_product = CreateProduct.Field()
+    update_low_stock_products = UpdateLowStockProducts.Field()
 
 
 class Query(graphene.ObjectType):
