@@ -200,6 +200,9 @@ class Query(graphene.ObjectType):
     all_customers = DjangoFilterConnectionField(CustomerNode)
     all_orders = DjangoFilterConnectionField(OrderNode)
     all_products = DjangoFilterConnectionField(ProductNode)
+    total_customers = graphene.Int()
+    total_orders = graphene.Int()
+    total_revenue = graphene.Decimal()
 
     # def resolve_all_products(root, info, filter=None, **kwargs):
     #     qs = Product.objects.all()
@@ -219,3 +222,12 @@ class Query(graphene.ObjectType):
 
     def resolve_products(root, info):
         return Product.objects.all()
+
+    def resolve_total_customers(root, info):
+        return Customer.objects.count()
+    def resolve_total_orders(root, info):
+        return Order.objects.count()
+    def resolve_total_revenue(root, info):
+        from django.db.models import Sum
+        revenue = Order.objects.aggregate(total_revenue=Sum('product_ids__price'))['total_revenue']
+        return revenue if revenue else 0
