@@ -1,6 +1,8 @@
 from gql import Client, gql
 from celery import shared_task
 from gql.transport.aiohttp import AIOHTTPTransport
+import requests
+from datetime import datetime
 
 # Select your transport with a defined url endpoint
 transport = AIOHTTPTransport(url="http://localhost:8000/graphql")
@@ -29,6 +31,6 @@ def  generate_crm_report():
     total_revenue = result['totalRevenue']
     total_customers = result['totalCustomers']
     with open('/tmp/crm_report_log.txt', 'a') as f:
-        datetime_now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        datetime_now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         f.write(f"{datetime_now} - Report: {total_customers} customers, {total_orders} orders, {total_revenue} revenue")
         f.write("\n")  # Add a newline for better readability
