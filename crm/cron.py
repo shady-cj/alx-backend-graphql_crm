@@ -53,3 +53,14 @@ def update_low_stock():
     )
     response = client.execute(query)
     print(response)
+
+    with open("/tmp/low_stock_updates_log.txt", "a") as log_file:
+        log_file.write(f"Low stock products updated at {datetime.datetime.now()}\n")
+        for product in response['updateLowStockProducts']['products']:
+            log_file.write(
+                f"Product ID: {product['id']}, Name: {product['name']}, Stock: {product['stock']}, Price: {product['price']}\n"
+            )
+        log_file.write("\n")  # Add a newline for better readability
+
+    print("Low stock products updated and logged!")
+    

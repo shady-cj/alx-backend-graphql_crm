@@ -1,7 +1,8 @@
 from graphene_django import DjangoObjectType, DjangoListField
 import graphene
 from graphene_django.filter import DjangoFilterConnectionField
-from .models import Customer, Product, Order
+from .models import Customer, Order
+from crm.models import Product
 import re
 from graphql import GraphQLError
 from django.utils import timezone
@@ -174,10 +175,11 @@ class CreateOrder(graphene.Mutation):
 
 
 class UpdateLowStockProducts(graphene.Mutation):
-    from django.db.models import F
     products = graphene.List(ProductType)
 
     def mutate(self, info):
+        from django.db.models import F
+
         Product.objects.filter(stock__lt=10).update(stock=F('stock') + 10)
         
         return UpdateLowStockProducts(products=Product.objects.all())
