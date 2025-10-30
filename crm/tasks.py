@@ -11,7 +11,7 @@ transport = AIOHTTPTransport(url="http://localhost:8000/graphql")
 client = Client(transport=transport)
 
 @shared_task(bind=True, autoretry_for=(Exception,), retry_backoff=True, retry_kwargs={'max_retries': 5})
-def  generate_crm_report():
+def generate_crm_report():
 
     # Provide a GraphQL query
     query = gql(
